@@ -2,15 +2,8 @@ from aocd import get_data
 from aocd import submit
 import time
 
-
 def part1(data):
-    return sum(
-        [
-            int(x[0] + x[-1])
-            for line in data.split()
-            for x in filter(lambda x: x.isnumeric(), line)
-        ]
-    )
+    return sum([int(list(filter(lambda x: x.isnumeric(),line))[0]+list(filter(lambda x: x.isnumeric(),line))[-1]) for line in data.split()])
 
 
 def part2(data):
