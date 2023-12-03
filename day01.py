@@ -1,45 +1,38 @@
 from aocd import get_data
-from aocd import submit
 import time
 
+
 def part1(data):
-    return sum([int(list(filter(lambda x: x.isnumeric(),line))[0]+list(filter(lambda x: x.isnumeric(),line))[-1]) for line in data.split()])
+    return sum(
+        [
+            int(
+                list(filter(lambda x: x.isnumeric(), line))[0]
+                + list(filter(lambda x: x.isnumeric(), line))[-1]
+            )
+            for line in data.split()
+        ]
+    )
 
 
 def part2(data):
     res = 0
     for line in data.split():
-        tmp = []
-        for i in range(len(line)):
-            if line[i].isnumeric():
-                tmp.append(line[i])
-            elif line[i : i + 3] == "one":
-                tmp.append("1")
-            elif line[i : i + 3] == "two":
-                tmp.append("2")
-            elif line[i : i + 5] == "three":
-                tmp.append("3")
-            elif line[i : i + 4] == "five":
-                tmp.append("5")
-            elif line[i : i + 4] == "four":
-                tmp.append("4")
-            elif line[i : i + 3] == "six":
-                tmp.append("6")
-            elif line[i : i + 5] == "seven":
-                tmp.append("7")
-            elif line[i : i + 5] == "eight":
-                tmp.append("8")
-            elif line[i : i + 4] == "nine":
-                tmp.append("9")
-        res += int(tmp[0] + tmp[-1])
+        digits = []
+        for i, n in enumerate(line):
+            if n.isnumeric():
+                digits.append(n)
+            else:
+                for l, num in enumerate(
+                    "one two three four five six seven eight nine ten".split()
+                ):
+                    if line[i:].startswith(num):
+                        digits.append(str(l + 1))
+        res += int(digits[0] + digits[-1])
     return res
 
 
 if __name__ == "__main__":
-    day, year = 1, 2023
-    data = get_data(day=day, year=year)
-    submit(part1(data), part="a", day=day, year=year)
-    submit(part2(data), part="b", day=day, year=year)
+    data = get_data(day=1, year=2023)
     t1 = time.time()
     res1 = part1(data)
     t2 = time.time()
