@@ -4,13 +4,11 @@ import time
 
 def part1(data):
     return sum(
-        [
             int(
-                list(filter(lambda x: x.isnumeric(), line))[0]
-                + list(filter(lambda x: x.isnumeric(), line))[-1]
+                filter(lambda x: x.isnumeric(), line).__next__()
+                + filter(lambda x: x.isnumeric(), reversed(line)).__next__()
             )
             for line in data.split()
-        ]
     )
 
 
