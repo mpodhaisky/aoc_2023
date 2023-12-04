@@ -3,13 +3,11 @@ import time
 
 
 def part1(data):
-    return sum(
-            int(
-                filter(lambda x: x.isnumeric(), line).__next__()
-                + filter(lambda x: x.isnumeric(), reversed(line)).__next__()
-            )
-            for line in data.split()
-    )
+    res = 0
+    for line in data.split("\n"):
+        digits = list(filter(lambda x: x.isdigit(), line))
+        res += int(digits[0] + digits[-1])
+    return res
 
 
 def part2(data):
