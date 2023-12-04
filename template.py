@@ -1,5 +1,4 @@
 from aocd import get_data
-from aocd import submit
 import time
 
 
@@ -14,8 +13,6 @@ def part2(data):
 if __name__ == "__main__":
     day, year = 1, 2018
     data = get_data(day=day, year=year)
-    submit(part1(data), part="a", day=day, year=year)
-    submit(part2(data), part="b", day=day, year=year)
     t1 = time.time()
     res1 = part1(data)
     t2 = time.time()
