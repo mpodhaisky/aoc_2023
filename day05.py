@@ -1,8 +1,25 @@
 from collections import defaultdict, deque
 import math
 from aocd import get_data
-from aocd import submit
 import time
+
+
+def mapRange(seed, maps):
+    res = []
+    maps = sorted(maps)
+    seed_start, seed_end = seed
+    if seed_end < maps[0][0] or seed_start > maps[-1][1]:
+        return [seed]
+    for map_start, map_end, delta in maps:
+        if map_start <= seed_start <= seed_end < map_end:
+            res.append((seed_start + delta, seed_end + delta))
+            return res
+        if map_start <= seed_start <= map_end <= seed_end:
+            res.append((seed_start + delta, map_end - 1 + delta))
+            seed_start = map_end
+    if seed_start <= seed_end:
+        res.append((seed_start, seed_end))
+    return res
 
 
 def part1(data):
@@ -31,42 +48,7 @@ def part1(data):
 
 
 def part2(data):
-    data = """seeds: 79 1 14 1 55 1 13 1
-
-seed-to-soil map:
-50 98 2
-52 50 48
-
-soil-to-fertilizer map:
-0 15 37
-37 52 2
-39 0 15
-
-fertilizer-to-water map:
-49 53 8
-0 11 42
-42 0 7
-57 7 4
-
-water-to-light map:
-88 18 7
-18 25 70
-
-light-to-temperature map:
-45 77 23
-81 45 19
-68 64 13
-
-temperature-to-humidity map:
-0 69 1
-1 0 69
-
-humidity-to-location map:
-60 56 37
-56 93 4
-""".split(
-        "\n"
-    )
+    data = data.split("\n")
     seeds = list(map(int, data[0].split(":")[1].split()))
 
     ms = []
@@ -83,23 +65,10 @@ humidity-to-location map:
         [(seeds[i - 1], seeds[i] + seeds[i - 1]) for i in range(1, len(seeds), 2)]
     )
     for m in ms:
+        tmp = []
         for _ in range(len(q)):
-            a, b = q.popleft()
-            for start, end, delta in sorted(m):
-                if b < start:
-                    q.append((a, b))
-                elif a <= start <= b:
-                    if a != start:
-                        q.append((a, start))
-                    if b != start:
-                        q.append((start + delta, min(b, end) + delta))
-                elif a <= end <= b:
-                    if a != end:
-                        q.append((a + delta, end + delta))
-                a = max(a, end)
-                if a >= b:
-                    continue
-        print(q)
+            tmp += mapRange(q.pop(), m)
+        q = tmp
     print(min(map(lambda x: x[0], q)))
 
 
