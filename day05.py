@@ -69,20 +69,20 @@ def part2(data):
         for _ in range(len(q)):
             tmp += mapRange(q.pop(), m)
         q = tmp
-    print(min(map(lambda x: x[0], q)))
+    return min(map(lambda x: x[0], q))
 
 
 if __name__ == "__main__":
     day, year = 5, 2023
     data = get_data(day=day, year=year)
     t1 = time.time()
-
+    part1(data)
     t2 = time.time()
-    res2 = part2(data)
+    part2(data)
     t3 = time.time()
     print("----------------Part 1-----------------")
     print(f"time: {t2-t1}")
-    part1(data)
+    print(part1(data))
     print("----------------Part 2-----------------")
     print(f"time: {t3-t2}")
-    part2(data)
+    print(part2(data))

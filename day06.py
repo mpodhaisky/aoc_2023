@@ -1,3 +1,4 @@
+from bisect import bisect_left, bisect_right
 from aocd import get_data
 import time
 
@@ -33,6 +34,8 @@ def part2(data):
             lo = mid + 1
         elif mid <= t:
             hi = mid - 1
+    print(bisect_left(range(t // 2), True, key=lambda x: x * (t - x) > d))
+    print(lower_bound)
     return upper_bound - lower_bound + 1
 
 
