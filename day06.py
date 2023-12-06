@@ -15,17 +15,25 @@ def part1(data):
 
 
 def part2(data):
-    time, distance = map(
-        lambda x: int("".join(x.split(":")[1].split())), data.split("\n")
-    )
-
-    res = 0
-
-    for i in range(time + 1):
-        if i * (time - i) > distance:
-            res += 1
-
-    return res
+    t, d = map(lambda x: int("".join(x.split(":")[1].split())), data.split("\n"))
+    lo, hi = 0, t // 2
+    lower_bound, upper_bound = t + 1, -1
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2
+        if mid * (t - mid) > d:
+            lower_bound = mid
+            hi = mid - 1
+        elif mid <= t:
+            lo = mid + 1
+    lo, hi = t // 2, t
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2
+        if mid * (t - mid) > d:
+            upper_bound = mid
+            lo = mid + 1
+        elif mid <= t:
+            hi = mid - 1
+    return upper_bound - lower_bound + 1
 
 
 if __name__ == "__main__":
