@@ -8,7 +8,7 @@ def part1(data):
     ops, eqs = data.split("\n\n")
     edge = {}
     for eq in eqs.split("\n"):
-        fr, l, r = re.findall(r"[a-zA-Z]+", eq)
+        fr, l, r = re.findall(r"[A-Z]+", eq)
         edge[fr] = (l, r)
     head, cnt = "AAA", 0
     while head != "ZZZ":
@@ -22,17 +22,17 @@ def part2(data):
     ops, eqs = data.split("\n\n")
     edge = {}
     for eq in eqs.split("\n"):
-        fr, l, r = re.findall(r"[a-zA-Z]+", eq)
+        fr, l, r = re.findall(r"[A-Z]+", eq)
         edge[fr] = (l, r)
-    start_nodes = [node for node in edge if node[2] == "A"]
+    start_nodes = [node for node in edge if node.endswith("A")]
     res = 1
     for head in start_nodes:
         cnt = 0
-        while head[2] != "Z":
+        while not head.endswith("Z"):
             l, r = edge[head]
             head = l if ops[cnt % len(ops)] == "L" else r
             cnt += 1
-        res *= cnt // math.gcd(res, cnt)
+        res = math.lcm(res, cnt)
     return res
 
 
