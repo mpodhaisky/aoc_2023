@@ -30,15 +30,17 @@ def part2(data):
 
 
 if __name__ == "__main__":
-    data = get_data(day=2, year=2023)
+    day, year = 2, 2023
+    data = get_data(day=day, year=year)
     t1 = time.time()
     res1 = part1(data)
     t2 = time.time()
     res2 = part2(data)
     t3 = time.time()
+    print(f"----------------day {str(day).zfill(2)}-----------------")
     print("----------------Part 1-----------------")
     print(f"time: {t2-t1}")
-    print(res1)
+    print(f"flag: {res1}")
     print("----------------Part 2-----------------")
     print(f"time: {t3-t2}")
-    print(res2)
+    print(f"flag: {res2}")
