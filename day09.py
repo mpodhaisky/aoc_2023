@@ -1,16 +1,19 @@
 from aocd import get_data
 import time
-from numpy import diff
+
+# from numpy import diff
 
 
 def part1(data):
     res = 0
     for line in data.split("\n"):
-        line = list(map(int, line.split()))
-        cnt = line[-1]
+        line = list(map(int, line.split()))[::-1]
+        cnt = line[0]
         while set(line) != {0}:
-            line = diff(line)
-            cnt += line[-1]
+            for i in range(len(line) - 1):
+                line[i] = line[i] - line[i + 1]
+            line.pop()
+            cnt += line[0]
         res += cnt
     return res
 
@@ -18,13 +21,39 @@ def part1(data):
 def part2(data):
     res = 0
     for line in data.split("\n"):
-        line = list(map(int, line.split()))[::-1]
-        cnt = line[-1]
+        line = list(map(int, line.split()))
+        cnt = line[0]
         while set(line) != {0}:
-            line = diff(line)
-            cnt += line[-1]
+            for i in range(len(line) - 1):
+                line[i] = line[i] - line[i + 1]
+            line.pop()
+            cnt += line[0]
         res += cnt
     return res
+
+
+# def part1(data):
+#     res = 0
+#     for line in data.split("\n"):
+#         line = list(map(int, line.split()))
+#         cnt = line[-1]
+#         while set(line) != {0}:
+#             line = diff(line)
+#             cnt += line[-1]
+#         res += cnt
+#     return res
+
+
+# def part2(data):
+#     res = 0
+#     for line in data.split("\n"):
+#         line = list(map(int, line.split()))[::-1]
+#         cnt = line[-1]
+#         while set(line) != {0}:
+#             line = diff(line)
+#             cnt += line[-1]
+#         res += cnt
+#     return res
 
 
 if __name__ == "__main__":
