@@ -3,46 +3,45 @@ import time
 
 
 def part1(data):
+    matrix = data.split("\n")
+    up, down, left, right = -1j, 1j, -1, 1
     move = {
-        "|": [[1, 0], [-1, 0]],
-        "L": [[-1, 0], [0, 1]],
-        "F": [[1, 0], [0, 1]],
-        "7": [[1, 0], [0, -1]],
-        "-": [[0, 1], [0, -1]],
-        "J": [[-1, 0], [0, -1]],
-        ".": [[0, 0]],
+        "S": [up, down, left, right],
+        "|": [up, down],
+        "L": [right, up],
+        "F": [right, down],
+        "7": [left, down],
+        "-": [left, right],
+        "J": [left, up],
     }
-    matrix = list(map(list, data.split("\n")))
-    m, n = len(matrix), len(matrix[0])
-    last_move = [-1, -1]
-    h_i, h_j = -1, -1
-    cnt = 1
-    for i in range(m):
-        for j in range(n):
-            if matrix[i][j] == "S":
-                if matrix[i - 1][j] in "|7F":
-                    h_i, h_j = i - 1, j
-                    last_move = [-1, 0]
-                elif matrix[i + 1][j] in "|JL":
-                    h_i, h_j = i + 1, j
-                    last_move = [1, 0]
-                elif matrix[i][j + 1] in "-J7":
-                    h_i, h_j = i, j + 1
-                    last_move = [0, 1]
-                elif matrix[i][j - 1] in "-FL":
-                    h_i, h_j = i, j - 1
-                    last_move = [0, -1]
-    while matrix[h_i][h_j] != "S":
-        last_move = [
-            m
-            for m in move[matrix[h_i][h_j]]
-            if [m[0] + last_move[0], m[1] + last_move[1]] != [0, 0]
-        ][0]
+    path = [
+        (r, c)
+        for r, row in enumerate(matrix)
+        for c, col in enumerate(row)
+        if col == "S"
+    ]
+    y, x = path[0]
+    last_move = 0
+    if down in move[matrix[y - 1][x]]:
+        path.append((y - 1, x))
+        last_move = up
+    elif up in move[matrix[y + 1][x]]:
+        path.append((y + 1, x))
+        last_move = down
+    elif left in move[matrix[y][x + 1]]:
+        path.append((y, x + 1))
+        last_move = right
+    elif right in move[matrix[y][x - 1]]:
+        path.append((y, x - 1))
+        last_move = left
 
-        h_i, h_j = h_i + last_move[0], h_j + last_move[1]
-        cnt += 1
-
-    return cnt // 2
+    while path[-1] != path[0]:
+        y, x = path[-1]
+        head = 1j * y + x
+        last_move += sum(move[matrix[y][x]])
+        path.append((int((head + last_move).imag), int((head + last_move).real)))
+    path.pop()
+    return len(path) // 2
 
 
 def part2(data):
