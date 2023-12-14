@@ -16,7 +16,27 @@ def part1(data):
 
 
 def part2(data):
-    pass
+    grid = data.strip().split("\n")
+    new_grid = []
+    seen = []
+    while grid not in seen:
+        seen.append(grid)
+        for _ in range(4):
+            for line in zip(*grid):
+                line = "".join(line)
+                groups = line.split("#")
+                new_grid.append(
+                    "#".join(["".join(sorted(group)[::-1]) for group in groups])
+                )
+            grid, new_grid = list(map(lambda x: x[::-1], new_grid)), []
+    cycle_start = seen.index(grid)
+    goal = 1000000000 - cycle_start
+    seen = seen[cycle_start:]
+    grid = seen[goal % len(seen)]
+    t = 0
+    for i, l in enumerate(grid[::-1], 1):
+        t += l.count("O") * i
+    return t
 
 
 if __name__ == "__main__":
