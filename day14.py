@@ -15,43 +15,34 @@ def part1(data):
     return t
 
 
-# def cycle(grid):
-#     for _ in range(4):
-#         grid = list(map(lambda x: "".join(x), zip(*grid)))
-#         grid = [
-#             "#".join(
-#                 ["".join(sorted(group, reverse=True)) for group in line.split("#")]
-#             )
-#             for line in grid
-#         ]
-#         grid = list(map(lambda x: x[::-1], grid))
-#     return grid
+def cycle(grid):
+    for _ in range(4):
+        grid = tuple(map(lambda x: "".join(x), zip(*grid)))
+        grid = [
+            "#".join(
+                [
+                    "O" * k + "." * (len(group) - k)
+                    for group in line.split("#")
+                    for k in [group.count("O")]
+                ]
+            )
+            for line in grid
+        ]
+        grid = tuple(map(lambda x: x[::-1], grid))
+    return grid
 
 
 def part2(data):
-    grid = data.strip().split("\n")
-    new_grid = []
-    seen = []
+    grid = tuple(data.strip().split("\n"))
+    states = []
+    seen = set()
     while grid not in seen:
-        seen.append(grid)
-        for _ in range(4):
-            for line in zip(*grid):
-                line = "".join(line)
-                groups = line.split("#")
-                new_grid.append([])
-                for group in groups:
-                    lo = 0
-                    for i, ch in enumerate(group):
-                        if ch == "o":
-                            group[i], group[lo] = group[lo], group[i]
-                            i += 1
-                    new_grid[-1].append("".join(group))
-                new_grid[-1] = "#".join(new_grid[-1])
-            grid, new_grid = list(map(lambda x: x[::-1], new_grid)), []
-    cycle_start = seen.index(grid)
-    goal = 1000000000 - cycle_start
-    seen = seen[cycle_start:]
-    grid = seen[goal % len(seen)]
+        states.append(grid)
+        seen.add(grid)
+        grid = cycle(grid)
+    cycle_start = states.index(grid)
+    cycle_len = len(states) - cycle_start
+    grid = states[((1000000000 - cycle_start) % cycle_len) + cycle_start]
     t = 0
     for i, l in enumerate(grid[::-1], 1):
         t += l.count("O") * i
