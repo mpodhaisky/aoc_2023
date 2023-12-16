@@ -1,6 +1,24 @@
 from aocd import get_data
 import time
 from collections import defaultdict
+import os
+from termcolor import colored
+
+
+def draw(grid, q, path):
+    pic = []
+    for r, row in enumerate(grid):
+        for c, col in enumerate(row):
+            if (r, c) in q:
+                pic.append(colored(col, "yellow"))
+            elif (r, c) in path:
+                pic.append(colored(col, "red"))
+            else:
+                pic.append(colored(col, "blue", attrs=["dark"]))
+        pic.append("\n")
+    time.sleep(0.1)
+    os.system("clear")
+    print("".join(pic))
 
 
 def part1(data, start):
@@ -38,6 +56,7 @@ def part1(data, start):
         q = [pos for a, b, s in q for pos in move(a, b, s) if pos not in seen]
         for t in q:
             seen.add(t)
+        draw(grid, set([(a, b) for a, b, _ in q]), set([(a, b) for a, b, _ in seen]))
     return len(set([(a, b) for a, b, _ in seen]))
 
 
