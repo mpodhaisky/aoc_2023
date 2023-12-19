@@ -12,13 +12,14 @@ def part1(data):
         weight, cnt, y, x, dy, dx = heapq.heappop(q)
         if (cnt, y, x, dy, dx) in seen:
             continue
-        if y == len(grid) - 1 and x == len(grid[0]) - 1:
+        if y == len(grid) - 1 and x == len(grid[0]) - 1 and cnt >= 4:
             return weight
         seen.add((cnt, y, x, dy, dx))
 
         for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            if (
-                (dr == dy and dx == dc and cnt == 3)
+            if (dy, dx) != (0, 0) and (
+                ((dy, dx) == (dr, dc) and cnt == 10)
+                or ((dy, dx) != (dr, dc) and cnt < 4)
                 or (dy, dx) == (-dr, -dc)
                 or dr + y < 0
                 or dc + x < 0
