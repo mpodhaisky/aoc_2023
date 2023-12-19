@@ -6,21 +6,6 @@ import time
 
 def part1(data):
     grid = data.split("\n")
-    grid = """2413432311323
-3215453535623
-3255245654254
-3446585845452
-4546657867536
-1438598798454
-4457876987766
-3637877979653
-4654967986887
-4564679986453
-1224686865563
-2546548887735
-4322674655533""".split(
-        "\n"
-    )
     q = [(0, 0, 0, 0, 0, 0)]
     seen = set()
     while q:
@@ -44,7 +29,7 @@ def part1(data):
             heapq.heappush(
                 q,
                 (
-                    weight + int(grid[y][x]),
+                    weight + int(grid[y + dr][x + dc]),
                     cnt + 1 if dr == dy and dx == dc else 1,
                     y + dr,
                     x + dc,
